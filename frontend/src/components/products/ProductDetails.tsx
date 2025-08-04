@@ -49,12 +49,6 @@ const similarProducts = [
     price: 180,
     images: [{ url: "https://picsum.photos/500/500?random=4" }],
   },
-  {
-    _id: 5,
-    name: "Product 1",
-    price: 100,
-    images: [{ url: "https://picsum.photos/500/500?random=5" }],
-  },
 ];
 
 function ProductDetails() {
