@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import loginImage from "../assets/login.webp";
+import registerImage from "../assets/register.webp";
 
-function Login() {
+function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
+    // Handle registration logic here
   };
 
   return (
@@ -24,6 +25,20 @@ function Login() {
           <p className="text-center mb-6">
             Enter your username and password to login
           </p>
+          <div className="mb-4">
+            <label htmlFor="name" className="block text-sm font-semibold mb-2">
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full p-2 border rounded"
+              placeholder="Enter your name"
+              required
+            />
+          </div>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-semibold mb-2">
               Email
@@ -61,15 +76,15 @@ function Login() {
             type="submit"
             className="w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition"
           >
-            Sign In
+            Sign Up
           </button>
           <p className="mt-6 text-center text-sm">
-            Don't have an account?
+            Already have an account?
             <Link
-              to="/register"
+              to="/login"
               className="text-blue-500 hover:underline font-semibold ml-1"
             >
-              Register
+              Login
             </Link>
           </p>
         </form>
@@ -79,9 +94,9 @@ function Login() {
       <div className="hidden md:block w-1/2 bg-gray-800">
         <div className="h-full flex flex-col justify-center items-center">
           <img
-            src={loginImage}
-            alt="Login"
-            className="w-full h-[600px] object-cover"
+            src={registerImage}
+            alt="Register"
+            className="w-full h-[700px] object-cover"
           />
         </div>
       </div>
@@ -89,4 +104,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
