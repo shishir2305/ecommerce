@@ -80,7 +80,7 @@ function CollectionPage() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  });
+  }, []);
 
   useEffect(() => {
     // Simulate fetching products from an API
