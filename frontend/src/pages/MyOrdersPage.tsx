@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Order {
   _id: string;
@@ -16,7 +17,12 @@ interface Order {
 }
 
 function MyOrdersPage() {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
+
+  const handleRowCLick = (orderId: string) => {
+    navigate(`/order/${orderId}`);
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -79,6 +85,7 @@ function MyOrdersPage() {
               orders.map((order) => (
                 <tr
                   key={order._id}
+                  onClick={() => handleRowCLick(order._id)}
                   className="border-b hover:border-gray-50 cursor-pointer"
                 >
                   <td className="py-2 px-2 sm:py-4 sm:px-4">
