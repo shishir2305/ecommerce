@@ -12,6 +12,7 @@ import helmet from 'helmet';
 import config from '@/config';
 import limiter from '@/lib/express_rate_limit';
 import { connectToDatabase, disconnectFromDatabase } from './lib/mongoose';
+import { logger } from '@/lib/winston';
 
 /**
  * Router
@@ -53,23 +54,23 @@ app.use(limiter);
  * - Starts the server on the specified PORT and logs the running URL.
  * - If an error occurs during startup, it is logged, and the process exits with status 1.
  */
-async () => {
+(async () => {
   try {
     await connectToDatabase();
 
     app.use('/api/v1', v1Routes);
 
     app.listen(config.PORT, () => {
-      console.log(`Server running on http://localhost:${config.PORT}`);
+      logger.info(`Server running on http://localhost:${config.PORT}`);
     });
   } catch (err) {
-    console.error('Error starting server:', err);
+    logger.error('Error starting server:', err);
 
     if (config.NODE_ENV === 'production') {
       process.exit(1);
     }
   }
-};
+})();
 
 /**
  * Handles server shutdown gracefully by disconnecting from the database
@@ -82,10 +83,10 @@ async () => {
 const handleServerShutdown = async () => {
   try {
     await disconnectFromDatabase();
-    console.log('Server SHUTDOWN');
+    logger.info('Server SHUTDOWN');
     process.exit(0);
   } catch (err) {
-    console.log('Error during server shutdown', err);
+    logger.error('Error during server shutdown', err);
   }
 };
 
