@@ -35,14 +35,12 @@ const requireAdminAuth = (
   const userId = req.userId;
   const userRole = req.userRole;
 
-  // if (userRole === 'admin') {
-  //   next();
-  // } else {
-  //   logger.warn(`Unauthorized access attempt by user ${userId}`);
-  //   res.status(403).json({ message: 'Forbidden: Admins only' });
-  // }
-  console.log(userId);
-  console.log(userRole);
+  if (userRole === 'admin') {
+    next();
+  } else {
+    logger.warn(`Unauthorized access attempt by user ${userId}`);
+    res.status(403).json({ message: 'Forbidden: Admins only' });
+  }
 };
 
 export default requireAdminAuth;

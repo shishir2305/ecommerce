@@ -13,16 +13,16 @@ import config from '@/config';
  */
 import { Types } from 'mongoose';
 
-export const generateAccessToken = (userId: Types.ObjectId, role: string) => {
-  const payload = { userId, role };
+export const generateAccessToken = (userId: Types.ObjectId, userRole: string) => {
+  const payload = { userId, userRole };
   return jwt.sign(payload, config.JWT_ACCESS_SECRET as string, {
     expiresIn: config.ACCESS_TOKEN_EXPIRY,
     subject: 'accessToken',
   });
 };
 
-export const generateRefreshToken = (userId: Types.ObjectId, role: string) => {
-  const payload = { userId, role };
+export const generateRefreshToken = (userId: Types.ObjectId, userRole: string) => {
+  const payload = { userId, userRole };
   return jwt.sign(payload, config.JWT_REFRESH_SECRET as string, {
     expiresIn: config.REFRESH_TOKEN_EXPIRY,
     subject: 'refreshToken',

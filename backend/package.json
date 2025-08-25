@@ -7,7 +7,8 @@
   "type": "commonjs",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "seed": "ts-node -r tsconfig-paths/register src/utils/db-seeder.ts"
   },
   "devDependencies": {
     "@types/compression": "^1.8.1",
