@@ -6,12 +6,13 @@ import { Router } from 'express';
 /**
  * Controllers
  */
-import getCurrentUser from '@/controllers/v1/user/get-current-user.controller';
+import createProduct from '@/controllers/v1/product/create-product.controller';
 
 /**
  * Middlewares
  */
 import authenticate from '@/middlewares/authenticate';
+import requireAdminAuth from '@/middlewares/adminAuthenticate';
 
 /**
  * Models
@@ -19,6 +20,6 @@ import authenticate from '@/middlewares/authenticate';
 
 const router = Router();
 
-router.get('/profile', authenticate, getCurrentUser);
+router.post('/', authenticate, requireAdminAuth, createProduct);
 
 export default router;

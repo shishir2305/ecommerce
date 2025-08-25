@@ -28,3 +28,19 @@ export const generateRefreshToken = (userId: Types.ObjectId, role: string) => {
     subject: 'refreshToken',
   });
 };
+
+export const verifyAccessToken = (token: string) => {
+  try {
+    return jwt.verify(token, config.JWT_ACCESS_SECRET as string);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const verifyRefreshToken = (token: string) => {
+  try {
+    return jwt.verify(token, config.JWT_REFRESH_SECRET as string);
+  } catch (error) {
+    throw error;
+  }
+};
