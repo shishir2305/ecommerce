@@ -17,7 +17,7 @@ import { logger } from '@/lib/winston';
 /**
  * Router
  */
-import v1Routes from '@/routes/v1';
+import v1Routes from '@/routes/v1/index.routes';
 
 /**
  * Express app initial

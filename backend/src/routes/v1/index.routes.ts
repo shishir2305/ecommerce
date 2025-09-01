@@ -10,6 +10,7 @@ const router = Router();
 import authRoutes from '@/routes/v1/auth.routes';
 import userRoutes from '@/routes/v1/user.routes';
 import productRoutes from '@/routes/v1/product.routes';
+import cartRoutes from './cart.routes';
 
 /**
  * Root route
@@ -26,5 +27,6 @@ router.get('/', (req, res) => {
 router.use('/auth', authRoutes);
 router.use('/users', userRoutes);
 router.use('/products', productRoutes);
+router.use('/cart', cartRoutes);
 
 export default router;
