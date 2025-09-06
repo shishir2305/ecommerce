@@ -3,17 +3,19 @@
  */
 import { Document, Schema, model } from 'mongoose';
 
-export interface ICheckoutItem {
+export interface IOrderItem {
   productId: Schema.Types.ObjectId;
   name: string;
   image: string;
-  price: number;
+  price: string;
+  size?: string;
+  color?: string;
   quantity: number;
 }
 
-export interface ICheckout extends Document {
+export interface IOrder extends Document {
   user: Schema.Types.ObjectId;
-  checkoutItems: [ICheckoutItem];
+  orderItems: IOrderItem[];
   shippingAddress: {
     address: string;
     city: string;
@@ -23,17 +25,14 @@ export interface ICheckout extends Document {
   paymentMethod: string;
   totalPrice: number;
   isPaid: boolean;
-  paidAt: Number;
+  paidAt?: Date;
+  isDelivered: boolean;
+  deliveredAt?: Date;
   paymentStatus: string;
-  paymentDetails: Schema.Types.Mixed;
-  isFinalized: boolean;
-  finalizedAt: Number;
+  status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
 }
 
-/**
- * Checkout Item schema
- */
-const checkoutItemSchema = new Schema<ICheckoutItem>(
+const orderItemSchema = new Schema(
   {
     productId: {
       type: Schema.Types.ObjectId,
@@ -49,9 +48,11 @@ const checkoutItemSchema = new Schema<ICheckoutItem>(
       required: true,
     },
     price: {
-      type: Number,
+      type: String,
       required: true,
     },
+    size: String,
+    color: String,
     quantity: {
       type: Number,
       required: true,
@@ -62,22 +63,31 @@ const checkoutItemSchema = new Schema<ICheckoutItem>(
   },
 );
 
-/**
- * Checkout schema
- */
-const checkoutSchema = new Schema<ICheckout>(
+const orderSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    checkoutItems: [checkoutItemSchema],
+    orderItems: [orderItemSchema],
     shippingAddress: {
-      address: { type: String, required: true },
-      city: { type: String, required: true },
-      postalCode: { type: String, required: true },
-      country: { type: String, required: true },
+      address: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      postalCode: {
+        type: String,
+        required: true,
+      },
+      country: {
+        type: String,
+        required: true,
+      },
     },
     paymentMethod: {
       type: String,
@@ -94,22 +104,26 @@ const checkoutSchema = new Schema<ICheckout>(
     paidAt: {
       type: Date,
     },
+    isDelivered: {
+      type: Boolean,
+      default: false,
+    },
+    deliveredAt: {
+      type: Date,
+    },
     paymentStatus: {
       type: String,
       default: 'pending',
     },
-    paymentDetails: {
-      type: Schema.Types.Mixed, // Store payment-related details(transaction ID, paypal response)
-    },
-    isFinalized: {
-      type: Boolean,
-      default: false,
-    },
-    finalizedAt: {
-      type: Date,
+    status: {
+      type: String,
+      enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'],
+      default: 'Processing',
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+  },
 );
 
-export default model<ICheckout>('Checkout', checkoutSchema);
+export default model('Order', orderSchema);
