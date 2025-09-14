@@ -5,6 +5,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import helmet from 'helmet';
+import cors from 'cors';
 
 /**
  * Custom modules
@@ -26,6 +27,8 @@ const app = express();
 
 // Enable JSON request body parsing
 app.use(express.json());
+
+app.use(cors())
 
 // Enable URL-encoded request body parsing with extended mode
 // `extended:true` allows rich objects and arrays via querystring library

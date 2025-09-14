@@ -1,22 +1,33 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import registerImage from "../assets/register.webp";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../redux/store";
+import { registerUser } from "../redux/slices/auth-slice";
 
 function Register() {
+  const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { loading, error } = useSelector((state: RootState) => state.auth);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle registration logic here
+    if (!name || !email || !password || loading) return;
+    try {
+      await dispatch(registerUser({ name, email, password }));
+    } catch (_) {}
   };
 
   return (
     <div className="flex">
       {/* Left hand side */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12">
-        <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-8 rounded-lg border shadow-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-md bg-white p-8 rounded-lg border shadow-sm"
+        >
           <div className="flex justify-center mb-6">
             <h2 className="text-xl font-medium">Ecommerce</h2>
           </div>
@@ -71,6 +82,12 @@ function Register() {
               required
             />
           </div>
+
+          {error && (
+            <div className="mb-3 text-sm text-red-600" role="alert">
+              {error}
+            </div>
+          )}
 
           <button
             type="submit"

@@ -1,21 +1,35 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import loginImage from "../assets/login.webp";
+import { loginUser } from "../redux/slices/auth-slice";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../redux/store";
 
 function Login() {
+  const dispatch = useDispatch<AppDispatch>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { loading, error } = useSelector((state: RootState) => state.auth);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
+    if (!email || !password || loading) return;
+    try {
+      await dispatch(loginUser({ email, password })).unwrap();
+      // Optional: navigate or show success toast here
+    } catch (_) {
+      // Error is handled via Redux state; optionally handle local UI
+    }
   };
 
   return (
     <div className="flex">
       {/* Left hand side */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12">
-        <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-8 rounded-lg border shadow-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-md bg-white p-8 rounded-lg border shadow-sm"
+        >
           <div className="flex justify-center mb-6">
             <h2 className="text-xl font-medium">Ecommerce</h2>
           </div>
@@ -57,11 +71,20 @@ function Login() {
             />
           </div>
 
+          {error && (
+            <div className="mb-3 text-sm text-red-600" role="alert">
+              {error}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition"
+            disabled={loading}
+            className={`w-full bg-black text-white p-2 rounded-lg font-semibold transition ${
+              loading ? "opacity-60 cursor-not-allowed" : "hover:bg-gray-800"
+            }`}
           >
-            Sign In
+            {loading ? "Signing in..." : "Sign In"}
           </button>
           <p className="mt-6 text-center text-sm">
             Don't have an account?
