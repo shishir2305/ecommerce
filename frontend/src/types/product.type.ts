@@ -25,6 +25,8 @@ export interface IProductDimensions {
 }
 
 export interface IProduct {
+  _id?: string; // MongoDB document id
+  id?: string; // sometimes APIs map _id to id
   name: string;
   description: string;
   price: number;
